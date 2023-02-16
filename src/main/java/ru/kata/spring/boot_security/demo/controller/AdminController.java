@@ -29,9 +29,10 @@ public class AdminController {
     @GetMapping("/admin")
     public String showAllUsers(Model model, Principal principal) {
         List<User> users = userService.getAllUsers();
+        User user = new User();
         model.addAttribute("activeUser", userService.loadUserByUsername(principal.getName()));
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("user", new User());
+        model.addAttribute("users", users);
+        model.addAttribute("user", user);
         List<Role> roles = roleService.getAllRoles();
         model.addAttribute("roles", roles);
         return "adminPage";
@@ -54,10 +55,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "users/update", method = RequestMethod.POST)
-    public String updateUser(User user, Integer[] rolesId) {
-        Set<Role> roles = new HashSet<>(roleService.getRoles(rolesId));
-        user.setRoles(roles);
-        userService.updateUser(user.getId(), user);
+    public String updateUser(User user, Integer oldUserId) {
+        userService.updateUser(oldUserId, user);
         return "redirect:/admin";
     }
 }

@@ -60,7 +60,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="user, state : ${users}" th:classappend="${state.odd}">
-                    <td th:utext="${user.Id}"></td>
+                    <td th:utext="${user.id}"></td>
                     <td th:utext="${user.name}"></td>
                     <td th:utext="${user.lastName}"></td>
                     <td th:utext="${user.age}"></td>
@@ -73,9 +73,15 @@
                         </button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteModal">
-                            <span style="color: white; font-family: sans-serif">Delete</span>
+                        <button type="button" class="btn btn-info" data-toggle="modal"
+                                data-target="#updateModal" th:data-id="${user.id}"
+                                th:data-email="${user.email}"
+                                th:data-name="${user.name}"
+                                th:data-lastName="${user.lastName}"
+                                th:data-age="${user.age}"
+                                th:data-password="${user.password}"
+                                th:data-roles="${user.roles}">
+                            Редактировать
                         </button>
                     </td>
                 </tr>
@@ -92,27 +98,27 @@
                 <span style="font-family: sans-serif; color: black">Edit user</span>
             </div>
             <div class="modal-body">
-                <form th:action="@{/users/update}" th:each="user : ${users}" id="updateFormId" method="post">
-                    <input type="hidden" name="id" th:field="*{user.id}" th:id="id">
+                <form th:action="@{/users/update}" th:object="${user}" id="updateFormId" method="post">
+                    <input type="hidden" name="id" th:id="id">
                     <div class="form-group">
                         <label th:for="email" class="col-form-label">Email</label>
-                        <input type="text" th:field="*{user.email}" class="form-control" name="email" id="email">
+                        <input type="text" class="form-control" name="email" th:id="email">
                     </div>
                     <div class="form-group">
                         <label th:for="name" class="col-form-label">First Name</label>
-                        <input type="text" th:field="${user.name}" class="form-control" name="name" id="name">
+                        <input type="text" class="form-control" name="name" th:id="name">
                     </div>
                     <div class="form-group">
                         <label th:for="lastName" class="col-form-label">Last name</label>
-                        <input type="text" th:field="${user.lastName}" class="form-control" name="lastName" id="lastName">
+                        <input type="text" class="form-control" name="lastName" th:id="lastName">
                     </div>
                     <div class="form-group">
                         <label th:for="age" class="col-form-label">Age</label>
-                        <input type="text" th:field="${user.age}" class="form-control" name="age" id="age">
+                        <input type="text" class="form-control" name="age" th:id="age">
                     </div>
                     <div class="form-group">
                         <label th:for="password" class="col-form-label">Password</label>
-                        <input type="text" th:field="${user.password}" class="form-control" name="password" id="password">
+                        <input type="text" class="form-control" name="password" th:id="password">
                     </div>
                     <div class="form-group">
                         <p>Role</p>
@@ -138,27 +144,30 @@
 <script>
     $('#updateModal').on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget)
-        const id = button.data(id)
-        const email = button.data(email)
-        const name = button.data('firstname')
+        const id = button.data('id')
+        const email = button.data('email')
+        const name = button.data('name')
         const lastName = button.data('lastName')
         const age = button.data('age')
         const password = button.data('password')
         const modal = $(this)
         modal.find('.modal-title').text('Delete user' + email)
-        modal.find('#id').val(userId)
+        modal.find('#id').val(id)
         modal.find('#email').val(email)
-        modal.find('#firstName').val(userFirstname)
-        modal.find('#lastName').val(userLastName)
-        modal.find('#age').val(userAge)
-        modal.find('#password').val(userPassword)
+        modal.find('#name').val(name)
+        modal.find('#lastName').val(lastName)
+        modal.find('#age').val(age)
+        modal.find('#password').val(password)
     })
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
-        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 </body>
 </html>
